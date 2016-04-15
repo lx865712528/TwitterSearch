@@ -1,19 +1,10 @@
 package com.suneony.twitter.search;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import twitter4j.*;
+import twitter4j.json.DataObjectFactory;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import twitter4j.Query;
-import twitter4j.QueryResult;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.json.DataObjectFactory;
 
 public class SearchFactory {
     private Twitter twitter = null;
@@ -51,33 +42,5 @@ public class SearchFactory {
             return null;
         }
         return statusStringList;
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        SearchFactory sf = new SearchFactory();
-        BufferedReader inputStream = new BufferedReader(
-                new FileReader("data/bdstechEntity.txt"));
-        int counter = 0, cc=0;
-        while (true) {
-            String keyword = inputStream.readLine();
-            if (keyword == null || keyword.length() == 0)
-                break;
-            ++counter;
-            ArrayList<String> tweetListOfKeyword = (ArrayList<String>) sf
-                    .search("\""+keyword+"\"");
-            ++cc;
-            OutputStreamWriter outputStream = new OutputStreamWriter(
-                    new FileOutputStream("data/" + counter + ".json"));
-            for (String string: tweetListOfKeyword) {
-                outputStream.write(string + "\n");
-            }
-            outputStream.close();
-            System.out.println(keyword + "  " + counter + " done.");
-            if(cc==160) {
-                cc=0;
-                Thread.sleep(900000);
-            }
-        }
-        inputStream.close();
     }
 }
